@@ -15,16 +15,38 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AccountsController {
     IAccountsService iAccountsService;
-@PostMapping("/create")
+
+    @PostMapping("/create")
     public ResponseEntity<String> createAccount(@RequestBody CustomerDto customerDto) {
-    iAccountsService.createAccount(customerDto);
-    return ResponseEntity
+        iAccountsService.createAccount(customerDto);
+        return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Account created successfully");
     }
+
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam String mobileNumber) {
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
-    return ResponseEntity.status(HttpStatus.OK).body(customerDto);
-}
+        return ResponseEntity.status(HttpStatus.OK).body(customerDto);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateAccount(@RequestBody CustomerDto customerDto) {
+        boolean isUpdated = iAccountsService.updateAccount(customerDto);
+        if (isUpdated) {
+            return ResponseEntity.status(HttpStatus.OK).body("Account updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAccount(@RequestParam String mobileNumber) {
+        boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
+        if (isDeleted) {
+            return ResponseEntity.status(HttpStatus.OK).body("Account deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+    }
 }
