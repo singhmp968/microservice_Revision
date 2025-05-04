@@ -1,5 +1,6 @@
 package com.eazybytes.cards.service.impl;
 
+import com.eazybytes.cards.Exception.CardAlreadyExistsException;
 import com.eazybytes.cards.entity.Cards;
 import com.eazybytes.cards.repository.CardsRepository;
 import com.eazybytes.cards.service.ICardsService;
@@ -18,5 +19,7 @@ public class CardsServiceImpl implements ICardsService {
         if (!card.isPresent()) {
             throw new CardAlreadyExistsException("Card already exists for mobile number: " + mobileNumber);
         }
+
+
     }
 }
