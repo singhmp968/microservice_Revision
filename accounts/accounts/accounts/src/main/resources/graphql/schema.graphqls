@@ -1,3 +1,4 @@
 type Query {
     hello: String
+    paramsRevise(fName: String, lName: String): String
 }
