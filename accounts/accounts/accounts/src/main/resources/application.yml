@@ -3,16 +3,23 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: ''
-    h2:
-      console:
-        enabled: true
+    url: jdbc:mysql://localhost:3306/GQlPractice
+    username: root
+    password: 'root'
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate.id.new_generator_mappings: false
     hibernate:
       ddl-auto: update
     show-sql: true
+
+#  graphql:
+#    servlet:
+#      mapping: /graphql
+#    graphiql:
+#      enabled: true
+#      endpoint: /graphql
+#      path: /graphiql
