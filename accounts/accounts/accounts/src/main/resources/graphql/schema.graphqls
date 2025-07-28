@@ -1,4 +1,9 @@
 type Query {
     hello: String
     paramsRevise(fName: String, lName: String): String
+    sampleRequestJson(sampleRequest: SampleRequest): String
+}
+input SampleRequest {
+    firstName: String
+    lastName: String
 }
