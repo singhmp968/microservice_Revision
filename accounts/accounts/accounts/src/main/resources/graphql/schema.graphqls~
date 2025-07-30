@@ -18,8 +18,3 @@ type StudentResponse {
     learningSubjects: [SubjectResponse]
 
 }
-type SubjectResponse {
-    id: ID
-    subjectName: String
-    marksObtained: Float
-}

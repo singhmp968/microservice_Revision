@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
@@ -31,6 +33,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 				url = "https://www.eazybytes.com/swagger-ui.html"
 		)
 )
+@EntityScan(basePackages = {"com.eazybytes.accounts.entity"})
+@EnableJpaRepositories(basePackages = {"com.eazybytes.accounts.repository"})
 public class AccountsApplication {
 
 	public static void main(String[] args) {
