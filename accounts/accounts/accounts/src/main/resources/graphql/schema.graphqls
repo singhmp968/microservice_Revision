@@ -15,6 +15,7 @@ type StudentResponse {
     email: String
     street: String
     city: String
+    fullName: String
     learningSubjects: [SubjectResponse]
 
 }
