@@ -16,11 +16,16 @@ type StudentResponse {
     street: String
     city: String
     fullName: String
-    learningSubjects: [SubjectResponse]
+    learningSubjects(subjectNameFilter: SubjectNameFilter): [SubjectResponse]
 
 }
 type SubjectResponse {
     id: ID
     subjectName: String
     marksObtained: Float
+}
+enum SubjectNameFilter {
+    Java,
+    MySQL,
+    MongoDB
 }
