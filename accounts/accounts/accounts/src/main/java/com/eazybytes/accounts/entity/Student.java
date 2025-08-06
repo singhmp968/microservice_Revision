@@ -1,5 +1,6 @@
 package com.eazybytes.accounts.entity;
 
+import com.eazybytes.accounts.GraphQlModalRequest.CreateStudentRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,10 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<Subject> learningSubjects;
+
+    public Student(CreateStudentRequest createStudentRequest) {
+        this.firstName = createStudentRequest.getFirstName();
+        this.lastName = createStudentRequest.getLastName();
+        this.email = createStudentRequest.getEmail();
+    }
 }
