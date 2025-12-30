@@ -1,5 +1,6 @@
 package com.eazybytes.accounts.controller;
 
+import com.eazybytes.accounts.dto.AccountContactInfoDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.entity.Customer;
 import com.eazybytes.accounts.service.IAccountsService;
@@ -10,7 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +28,10 @@ public class AccountsController {
 
     @Value("${build.version}")
     private String buildVersion;
-
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private AccountContactInfoDto accountContactInfoDto;
     private final IAccountsService iAccountsService;
 
     public AccountsController(IAccountsService iAccountsService) {
@@ -99,6 +105,35 @@ public class AccountsController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(buildVersion);
+    }
+
+    @Operation(summary = "Get Java Information",
+            description = "Get java version details /that si installed into accounts microservices")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500",description = "Account not deleted successfully")
+    })
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("MAVEN_HOME"));
+    }
+
+
+    @Operation(summary = "Get Contact Information",
+            description = "Get Contact version details /that si installed into accounts microservices")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500",description = "Account not deleted successfully")
+    })
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountContactInfoDto> getContactInfo(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountContactInfoDto);
     }
 
 }
