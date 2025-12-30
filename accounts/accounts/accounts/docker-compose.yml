@@ -1,0 +1,38 @@
+services:
+  accounts:
+    image: "xinghmp968/accounts:s4"
+    container_name: "accounts-ms"
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - eazybank
+  loans:
+    image: xinghmp968/loans:s4
+    container_name: "loans-ms"
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - eazybank
+  cards:
+    image: xinghmp968/cards:s4
+    container_name: "cards-ms"
+    ports:
+      - "8082:8082"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - eazybank
+# telling docker to create a network called eazybank so that all the microservices can communicate with each other
+networks:
+  eazybank:
+    driver: bridge

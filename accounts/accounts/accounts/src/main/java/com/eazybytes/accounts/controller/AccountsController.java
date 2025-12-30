@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api",produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
+
 @Validated
 public class AccountsController {
-    IAccountsService iAccountsService;
 
+    @Value("${build.version}")
+    private String buildVersion;
+
+    private final IAccountsService iAccountsService;
+
+    public AccountsController(IAccountsService iAccountsService) {
+        this.iAccountsService = iAccountsService;
+    }
     @Operation(summary = "Create a new account",
             description = "This API is used to create a new account")
     @ApiResponses(value = {
@@ -78,4 +86,19 @@ public class AccountsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
         }
     }
+
+    @Operation(summary = "Get Build Information",
+            description = "Get build information that deployed into the accounts microservices")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500",description = "Account not deleted successfully")
+    })
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
 }
