@@ -96,7 +96,7 @@
                 <version>3.5.1</version>
                 <configuration>
                     <to>
-                        <image>xinghmp968/${project.artifactId}:s4</image>
+                        <image>xinghmp968/${project.artifactId}:s6</image>
                     </to>
                 </configuration>
             </plugin>
