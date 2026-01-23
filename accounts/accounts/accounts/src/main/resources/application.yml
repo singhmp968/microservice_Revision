@@ -29,7 +29,7 @@ spring:
     password: "guest"
 
 management:
-    endpoints:
-      web:
-        exposure:
-          include: "*"
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,37 +1,96 @@
 services:
+  rabbit:
+    image: "rabbitmq:3-management"
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics check_port_connectivity", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - eazybank
+
+  configserver:
+    image: "xinghmp968/configserver:s4"
+    container_name: "config-server"
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8071/actuator/health/readiness | grep UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
   accounts:
     image: "xinghmp968/accounts:s4"
     container_name: "accounts-ms"
     ports:
       - "8080:8080"
+    depends_on:
+      configserver:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 700m
     networks:
       - eazybank
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
   loans:
     image: xinghmp968/loans:s4
     container_name: "loans-ms"
     ports:
       - "9000:9000"
+    depends_on:
+      configserver:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 700m
     networks:
       - eazybank
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
   cards:
     image: xinghmp968/cards:s4
     container_name: "cards-ms"
     ports:
       - "8082:8082"
+    depends_on:
+      configserver:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 700m
     networks:
       - eazybank
+    environment:
+      SPRING_APPLICATION_NAME: "cards"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
 # telling docker to create a network called eazybank so that all the microservices can communicate with each other
 networks:
   eazybank:
