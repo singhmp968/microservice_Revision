@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api",produces = {MediaType.APPLICATION_JSON_VALUE})
-
 @Validated
 public class AccountsController {
 
