@@ -178,7 +178,7 @@
                 <version>3.5.1</version>
                 <configuration>
                     <to>
-                        <image>xinghmp968/${project.artifactId}:s7</image>
+                        <image>xinghmp968/${project.artifactId}:s9</image>
                     </to>
                 </configuration>
             </plugin>

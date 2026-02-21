@@ -5,6 +5,8 @@ import com.eazybytes.cards.dto.CardsDto;
 import com.eazybytes.cards.dto.ResponseDto;
 import com.eazybytes.cards.service.ICardsService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api",
                 produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CardsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
     ICardsService iCardsService;
 
     @PostMapping("/create")
@@ -27,7 +31,9 @@ public class CardsController {
 
 
 @GetMapping("/fetch")
-public ResponseEntity<CardsDto> fetchCardsDetails(@RequestParam String mobileNumber) {
+public ResponseEntity<CardsDto> fetchCardsDetails(@RequestHeader("eazybank-correlation-id") String correlationId ,
+                                                  @RequestParam String mobileNumber) {
+    logger.debug("eazyBank-correlation-id found: {}", correlationId);
     CardsDto cardsDto = iCardsService.fetchCards(mobileNumber);
     return ResponseEntity
             .status(HttpStatus.OK)
