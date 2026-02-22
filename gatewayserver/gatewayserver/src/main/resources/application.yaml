@@ -11,6 +11,12 @@ spring:
             locator:
               enabled: false
               lowerCaseServiceId: true
+          httpclient:
+            connect-timeout: 1000
+            read-timeout: 5s
+    openfeign:
+      circuitbreaker:
+        enabled: true
 management:
   endpoints:
     web:
@@ -34,3 +40,12 @@ logging:
     com:
       eazybytes:
         gatewayserver: DEBUG
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+#        registerHealthIndicator: true
+        slidingWindowSize: 10
+#        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000

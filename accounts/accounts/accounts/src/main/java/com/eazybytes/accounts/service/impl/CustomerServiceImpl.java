@@ -41,7 +41,11 @@ public class CustomerServiceImpl implements ICustomerService{
 //        ResponseEntity<LoanDto> loansDtoReponseEntity = loansFeingClient.fetch(mobileNumber);
 //        customerDetailsDto.setLoansDto(loansDtoReponseEntity.getBody());
         ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeingClient.fetchCardsDetails(correlationId,mobileNumber);
-        customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+        if(null != cardsDtoResponseEntity) {
+            customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+        } else {
+            System.out.println("No cards details found for mobile number: " + mobileNumber);
+        }
         return customerDetailsDto;
     }
 }
