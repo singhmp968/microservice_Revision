@@ -2,6 +2,8 @@ package com.eazybytes.gatewayserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.context.annotation.Bean;
 
 
@@ -10,6 +12,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -45,8 +48,25 @@ public class GatewayserverApplication {
 
                         )
                         .uri("lb://LOANS"))
+                .route( r -> r
+                        .path("/eazybytes/cards/**")
+                        .filters(f->f.rewritePath("/eazybytes/cards/(?<segment>.*)","/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .requestRateLimiter(c -> c.setRateLimiter(redisRateLimiter()).setKeyResolver(userKeyResolver()))
 
+                        )
+                        .uri("lb://CARDS"))
                 .build();
+    }
+
+    @Bean
+    public RedisRateLimiter redisRateLimiter() {
+        return new RedisRateLimiter(1, 1,1);
+    }
+
+    @Bean
+    KeyResolver userKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getQueryParams().getFirst("user"));
     }
 
 }

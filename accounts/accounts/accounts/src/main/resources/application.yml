@@ -80,3 +80,9 @@ resilience4j.retry:
         retryExceptions:
           - java.io.IOException
           - java.util.concurrent.TimeoutException
+resilience4j.rateLimiter:
+    configs:
+      default:
+        limitForPeriod: 1000
+        limitRefreshPeriod: 5000
+        timeoutDuration: 1
