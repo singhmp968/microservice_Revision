@@ -29,7 +29,9 @@ spring:
 #    port: 5672
 #    username: "guest"
 #    password: "guest"
-
+  metrics:
+    tags:
+      application: ${spring.application.name}
 management:
   endpoints:
     web:
@@ -59,6 +61,9 @@ logging:
     com:
       eazybytes:
         accounts: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
 resilience4j:
   circuitbreaker:
     configs:

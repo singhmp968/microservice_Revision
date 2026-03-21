@@ -37,8 +37,10 @@ public class CustomerController {
     @GetMapping("/fetchCustomerDetails")
     public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("eazybank-correlation-id") String correlationId,
                                                                     @RequestParam String mobileNumber) {
-        logger.info("eazyBank-correlation-id found: {}", correlationId);
+        logger.info("fetchCustomerDetails start");
         CustomerDetailsDto customerDetailsDto =iCustomerService.fetchCustomerDetails(mobileNumber, correlationId);
+        logger.info("fetchCustomerDetails end");
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerDetailsDto);
